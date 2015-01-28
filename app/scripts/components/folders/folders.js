@@ -28,20 +28,21 @@ var Folders = React.createClass({
   items: function() {
     var _this = this;
     return this.state.items.map(function(item) {
-      var handleChange = function() {
-        return _this.handleItemChange(item);
+      var handleClick = function() {
+        return _this.handleItemClick(item);
       };
 
-      return <Item key={item.id} name={item.name} checked={item.checked} onChange={handleChange} />;
+      return <Item key={item.id} name={item.name} checked={item.checked} onClick={handleClick} />;
     });
   },
 
   tableHeader: function() {
+    var disableButtons = !this.isAnyItemSelected();
     return <tr>
       <th><input type="checkbox" checked={this.areAllItemsSelected()} onChange={this.handleSelectAllChange} /></th>
-      <th>Rename</th>
-      <th>Delete</th>
-      <th>New folder</th>
+      <th><button disabled={disableButtons}>Rename</button></th>
+      <th><button disabled={disableButtons}>Delete</button></th>
+      <th><button disabled={disableButtons}>New folder</button></th>
     </tr>;
   },
 
@@ -73,11 +74,17 @@ var Folders = React.createClass({
     }, true);
   },
 
+  isAnyItemSelected: function() {
+    return this.state.items.reduce(function(bool, item){
+      return bool || item.checked;
+    }, false);
+  },
+
   handleSelectAllChange: function() {
     this.toggleAll();
   },
 
-  handleItemChange: function(item) {
+  handleItemClick: function(item) {
     this.toggleItem(item);
   }
 });

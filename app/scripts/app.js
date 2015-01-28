@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var React = window.React = require('react'),
-    Folders = require('./components/folders/folders'),
+    Folders = require('./components/folders/Folders'),
     mountNode = document.getElementById("app");
 
 var FoldersApp = React.createClass({

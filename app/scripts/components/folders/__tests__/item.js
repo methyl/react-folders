@@ -1,9 +1,9 @@
 /** @jsx React.DOM */
 
-jest.dontMock('../item.js');
+jest.dontMock('../Item.js');
 
 var React = require('react/addons');
-var Item = require('../item.js');
+var Item = require('../Item.js');
 var TestUtils = React.addons.TestUtils;
 
 describe('Item', function() {
