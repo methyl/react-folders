@@ -28,11 +28,21 @@ var Folders = React.createClass({
   items: function() {
     var _this = this;
     return this.state.items.map(function(item) {
-      var handleClick = function() {
-        return _this.handleItemClick(item);
+      var handleChange = function() {
+        return _this.handleItemChange(item);
       };
 
-      return <Item key={item.id} name={item.name} checked={item.checked} onClick={handleClick} />;
+      var handleCancelClick = function() {
+        return _this.handleItemCancelClick(item);
+      };
+
+      var handleSave = function(name) {
+        return _this.handleItemSave(item, name);
+      };
+
+      return <Item key={item.id} name={item.name} checked={item.checked} 
+                   renaming={item.renaming} onChange={handleChange} 
+                   onCancelClick={handleCancelClick} onSave={handleSave} />;
     });
   },
 
@@ -40,7 +50,7 @@ var Folders = React.createClass({
     var disableButtons = !this.isAnyItemSelected();
     return <tr>
       <th><input type="checkbox" checked={this.areAllItemsSelected()} onChange={this.handleSelectAllChange} /></th>
-      <th><button disabled={disableButtons}>Rename</button></th>
+      <th><button disabled={disableButtons} onClick={this.handleRenameClick}>Rename</button></th>
       <th><button disabled={disableButtons}>Delete</button></th>
       <th><button disabled={disableButtons}>New folder</button></th>
     </tr>;
@@ -80,11 +90,54 @@ var Folders = React.createClass({
     }, false);
   },
 
+  renameSelected: function() {
+    var items = this.state.items.map(function(item) {
+      item.renaming = item.checked;
+      return item;
+    });
+    this.setState({ items: items });
+  },
+
+  cancelItem: function(item) {
+    var items = this.state.items.map(function(_item) {
+      if (item.id === _item.id) {
+        _item.renaming = false;
+        _item.checked = false;
+      }
+      return _item;
+    });
+    this.setState({ items: items });
+  },
+
+  saveItem: function(item, name) {
+    var items = this.state.items.map(function(_item) {
+      if (item.id === _item.id) {
+        _item.name = name;
+        _item.renaming = false;
+        _item.checked = false;
+      }
+      return _item;
+    });
+    this.setState({ items: items });
+  },
+
+  handleItemCancelClick: function(item) {
+    this.cancelItem(item);
+  },
+
+  handleItemSave: function(item, name) {
+    this.saveItem(item, name);
+  },
+
+  handleRenameClick: function() {
+    this.renameSelected();
+  },
+
   handleSelectAllChange: function() {
     this.toggleAll();
   },
 
-  handleItemClick: function(item) {
+  handleItemChange: function(item) {
     this.toggleItem(item);
   }
 });
