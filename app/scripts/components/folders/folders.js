@@ -32,7 +32,7 @@ var Folders = React.createClass({
         return _this.handleItemChange(item);
       };
 
-      return <Item key={item.id} name={item.name} checked={item.checked} onChange={handleChange} />
+      return <Item key={item.id} name={item.name} checked={item.checked} onChange={handleChange} />;
     });
   },
 
