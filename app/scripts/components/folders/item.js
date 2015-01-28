@@ -14,6 +14,14 @@ var Item = React.createClass({
     };
   },
 
+  componentDidUpdate: function() {
+    this.setFocus();
+  },
+
+  componentDidMount: function() {
+    this.setFocus();
+  },
+
   render: function() {
     return <tr>
       <td><input type="checkbox" checked={this.props.checked} onChange={this.handleChange} /></td>
@@ -24,11 +32,18 @@ var Item = React.createClass({
   },
 
   editForm: function() {
-    return <form onSubmit={this.handleSubmit}>
+    return <form onSubmit={this.handleSubmit} className="edit-form">
       <input type="text" ref="nameInput" value={this.state.name || this.props.name} onChange={this.handleNameChange} />
-      <button onClick={this.handleSaveClick}>Save</button>
-      <button onClick={this.handleCancelClick}>Cancel</button>
+      <div className="button-group radius">
+        <button className="button tiny success" onClick={this.handleSaveClick}>Save</button>
+        <button className="button tiny alert" onClick={this.handleCancelClick}>Cancel</button>
+      </div>
     </form>;
+  },
+
+  setFocus: function() {
+    if (this.props.renaming && this.props.isFocused)
+      this.refs.nameInput.getDOMNode().focus();
   },
 
   handleNameChange: function(e) {

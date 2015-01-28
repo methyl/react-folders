@@ -1,1 +1,34 @@
 @import 'foundation/scss/foundation';
+
+.folders > table {
+  width: 100%;
+
+  input, button {
+    margin-bottom: 0;
+  }
+
+  td, th {
+    height: 59px;
+  }
+
+  td input[type=checkbox] {
+    margin-top: 3px;
+  }
+
+  button.pull-right {
+    float: right;
+  }
+}
+
+.edit-form {
+  input {
+    width: 240px;
+    margin-left: -9px;
+    margin-right: $column-gutter;
+    display: inline-block;
+  }
+
+  .button-group {
+    display: inline-block;
+  }
+}

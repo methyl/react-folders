@@ -19,7 +19,7 @@ var Folders = React.createClass({
   },
 
   render: function() {
-    return <div>
+    return <div className="folders">
       <table>
         <tbody>
           {this.tableHeader()}
@@ -44,7 +44,7 @@ var Folders = React.createClass({
         return _this.handleItemSave(item, name);
       };
 
-      return <Item key={item.id} name={item.name} checked={item.checked} 
+      return <Item key={item.id} name={item.name} checked={item.checked} isFocused={item.isFocused}
                    renaming={item.renaming} onChange={handleChange} 
                    onCancelClick={handleCancelClick} onSave={handleSave} />;
     });
@@ -53,11 +53,11 @@ var Folders = React.createClass({
   tableHeader: function() {
     var disableButtons = !this.isAnyItemSelected();
     return <tr>
-      <th><input type="checkbox" checked={this.areAllItemsSelected()} onChange={this.handleSelectAllChange} /></th>
+      <th width="25"><input type="checkbox" checked={this.areAllItemsSelected()} onChange={this.handleSelectAllChange} /></th>
       <th>
         <button className="button tiny" disabled={disableButtons} onClick={this.handleRenameClick}>Rename</button>
         <button className="button tiny alert" disabled={disableButtons} onClick={this.handleDeleteClick}>Delete</button>
-        <button className="button tiny success" disabled={disableButtons}>New folder</button>
+        <button className="button tiny success pull-right" disabled={this.state.isCreatingNewFolder} onClick={this.handleNewFolderClick}>New folder</button>
       </th>
     </tr>;
   },
@@ -103,8 +103,13 @@ var Folders = React.createClass({
   },
 
   renameSelected: function() {
+    var focusSet = false;
     var items = this.state.items.map(function(item) {
       item.renaming = item.checked;
+      if (!focusSet && item.checked) {
+        focusSet = true;
+        item.isFocused = item.checked;
+      }
       return item;
     });
     this.setState({ items: items });
@@ -118,7 +123,10 @@ var Folders = React.createClass({
       }
       return _item;
     });
-    this.setState({ items: items });
+    items = items.filter(function(item) {
+      return !item.new;
+    });
+    this.setState({ isCreatingNewFolder: false, items: items });
   },
 
   saveItem: function(item, name) {
@@ -127,10 +135,11 @@ var Folders = React.createClass({
         _item.name = name;
         _item.renaming = false;
         _item.checked = false;
+        _item.new = false;
       }
       return _item;
     });
-    this.setState({ items: items });
+    this.setState({ isCreatingNewFolder: false, items: items });
   },
 
   showDeletePopup: function() {
@@ -141,6 +150,13 @@ var Folders = React.createClass({
       });
       this.setState({ items: items });
     }
+  },
+
+  handleNewFolderClick: function() {
+    var items = this.state.items;
+    var nextId = Math.max.apply(null, items.map(function(item) { return item.id })) + 1;
+    items.push({ id: nextId, name: '', renaming: true, new: true, isFocused: true  });
+    this.setState({ isCreatingNewFolder: true, items: items});
   },
 
   handleDeleteClick: function(item) {
