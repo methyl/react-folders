@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var React = window.React = require('react'),
+    Folders = require('./components/folders/folders'),
     mountNode = document.getElementById("app");
 
 var FoldersApp = React.createClass({
@@ -9,10 +10,12 @@ var FoldersApp = React.createClass({
       <div className="row">
         <div className="small-12 columns">
           <h2>Hello world!</h2>
+
+          <Folders />
         </div>
       </div>
     );
   }
 });
 
-React.renderComponent(<FoldersApp />, mountNode);
+React.render(<FoldersApp />, mountNode);
