@@ -9,7 +9,7 @@ var FoldersApp = React.createClass({
     return (
       <div className="row">
         <div className="small-12 columns">
-          <h2>Hello world!</h2>
+          <h2>Welcome to folders!</h2>
 
           <Folders />
         </div>

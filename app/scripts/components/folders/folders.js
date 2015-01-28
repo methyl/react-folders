@@ -25,8 +25,8 @@ var Folders = React.createClass({
           {this.tableHeader()}
           {this.items()}
         </tbody>
-      </table>;
-    </div>
+      </table>
+    </div>;
   },
 
   items: function() {
@@ -54,9 +54,11 @@ var Folders = React.createClass({
     var disableButtons = !this.isAnyItemSelected();
     return <tr>
       <th><input type="checkbox" checked={this.areAllItemsSelected()} onChange={this.handleSelectAllChange} /></th>
-      <th><button disabled={disableButtons} onClick={this.handleRenameClick}>Rename</button></th>
-      <th><button disabled={disableButtons} onClick={this.handleDeleteClick}>Delete</button></th>
-      <th><button disabled={disableButtons}>New folder</button></th>
+      <th>
+        <button className="button tiny" disabled={disableButtons} onClick={this.handleRenameClick}>Rename</button>
+        <button className="button tiny alert" disabled={disableButtons} onClick={this.handleDeleteClick}>Delete</button>
+        <button className="button tiny success" disabled={disableButtons}>New folder</button>
+      </th>
     </tr>;
   },
 
