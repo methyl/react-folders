@@ -19,10 +19,14 @@ var Folders = React.createClass({
   },
 
   render: function() {
-    return <table>
-      {this.tableHeader()}
-      {this.items()}
-    </table>;
+    return <div>
+      <table>
+        <tbody>
+          {this.tableHeader()}
+          {this.items()}
+        </tbody>
+      </table>;
+    </div>
   },
 
   items: function() {
@@ -51,7 +55,7 @@ var Folders = React.createClass({
     return <tr>
       <th><input type="checkbox" checked={this.areAllItemsSelected()} onChange={this.handleSelectAllChange} /></th>
       <th><button disabled={disableButtons} onClick={this.handleRenameClick}>Rename</button></th>
-      <th><button disabled={disableButtons}>Delete</button></th>
+      <th><button disabled={disableButtons} onClick={this.handleDeleteClick}>Delete</button></th>
       <th><button disabled={disableButtons}>New folder</button></th>
     </tr>;
   },
@@ -78,16 +82,22 @@ var Folders = React.createClass({
     this.setState({ items: items });
   },
 
+  getCheckedItems: function() {
+    return this.state.items.filter(function(item) {
+      return item.checked;
+    });
+  },
+
   areAllItemsSelected: function() {
-    return this.state.items.reduce(function(bool, item){
-      return bool && item.checked;
-    }, true);
+    return this.state.items.length !== 0 && this.getCheckedItems().length === this.state.items.length;
   },
 
   isAnyItemSelected: function() {
-    return this.state.items.reduce(function(bool, item){
-      return bool || item.checked;
-    }, false);
+    return this.getCheckedItems().length > 0;
+  },
+
+  areManyItemSelected: function() {
+    return this.getCheckedItems().length > 1;
   },
 
   renameSelected: function() {
@@ -119,6 +129,20 @@ var Folders = React.createClass({
       return _item;
     });
     this.setState({ items: items });
+  },
+
+  showDeletePopup: function() {
+    var pluralized = this.areManyItemSelected() ? 'items' : 'item';
+    if (confirm("Are you sure want to delete "+ pluralized + '?')) {
+      var items = this.state.items.filter(function(item) {
+        return !item.checked;
+      });
+      this.setState({ items: items });
+    }
+  },
+
+  handleDeleteClick: function(item) {
+    this.showDeletePopup();
   },
 
   handleItemCancelClick: function(item) {
